@@ -9,13 +9,12 @@
 swap_file_size='512'
 
 # Source functions
-source linux_scripts.sh
-source debian_scripts.sh
-source linux_install_scripts.sh
-source bash_config_scripts.sh
-source /tmp/temp_variables.sh
+source debian_server_scripts.sh
+source temp_variables.sh
 
 # Call functions
+get_base_partition_uuids "${partition1}" "${partition2}"
+get_interface_name
 debian_create_boot_directories
 debian_create_device_files
 create_basic_partition_fstab
