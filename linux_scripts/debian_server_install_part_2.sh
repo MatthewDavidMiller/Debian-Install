@@ -13,8 +13,6 @@ source debian_server_scripts.sh
 source temp_variables.sh
 
 # Call functions
-get_base_partition_uuids "${partition1}" "${partition2}"
-get_interface_name
 debian_create_boot_directories
 debian_create_device_files
 create_basic_partition_fstab

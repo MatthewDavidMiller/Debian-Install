@@ -54,4 +54,6 @@ create_basic_filesystems "${partition1}" "${partition2}"
 mount_basic_filesystems "${partition1}" "${partition2}"
 debootstrap_install_base_packages "${version}"
 mount_proc_and_sysfs
+get_base_partition_uuids "${partition1}" "${partition2}"
+get_interface_name
 debian_install_move_to_script_part_2

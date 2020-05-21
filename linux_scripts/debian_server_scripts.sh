@@ -127,6 +127,9 @@ partition1="${partition1}"
 partition2="${partition2}"
 version="${version}"
 ucode="${ucode}"
+interface="${interface}"
+uuid="${uuid}"
+uuid2="${uuid2}"
 EOF
     LANG=C.UTF-8 chroot /mnt "./debian_server_install_part_2.sh"
 }
