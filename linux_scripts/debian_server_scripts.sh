@@ -146,9 +146,9 @@ function debian_create_device_files() {
 }
 
 function create_basic_partition_fstab() {
-    grep -q ".*UUID=${uuid} \/boot\/EFI" '/etc/fstab' && sed -i "s,.*UUID=${uuid} \/boot\/EFI.*,UUID=${uuid} \/boot\/EFI vfat defaults 0 0," '/etc/fstab' || printf '%s\n' "UUID=${uuid} /boot/EFI vfat defaults 0 0" >>'/etc/fstab'
-    grep -q ".*\/swapfile" '/etc/fstab' && sed -i "s,.*\/swapfile.*,\/swapfile none swap defaults 0 0," '/etc/fstab' || printf '%s\n' "/swapfile none swap defaults 0 0" >>'/etc/fstab'
-    grep -q ".*UUID=${uuid2} \/" '/etc/fstab' && sed -i "s,.*UUID=${uuid2} \/.*,UUID=${uuid2} \/ ext4 defaults 0 0," '/etc/fstab' || printf '%s\n' "UUID=${uuid2} / ext4 defaults 0 0" >>'/etc/fstab'
+    grep -q -E ".*UUID=${uuid} \/boot\/EFI" '/etc/fstab' && sed -i -E "s,.*UUID=${uuid} \/boot\/EFI.*,UUID=${uuid} \/boot\/EFI vfat defaults 0 0," '/etc/fstab' || printf '%s\n' "UUID=${uuid} /boot/EFI vfat defaults 0 0" >>'/etc/fstab'
+    grep -q -E ".*\/swapfile" '/etc/fstab' && sed -i -E "s,.*\/swapfile.*,\/swapfile none swap defaults 0 0," '/etc/fstab' || printf '%s\n' "/swapfile none swap defaults 0 0" >>'/etc/fstab'
+    grep -q -E ".*UUID=${uuid2} \/" '/etc/fstab' && sed -i -E "s,.*UUID=${uuid2} \/.*,UUID=${uuid2} \/ ext4 defaults 0 0," '/etc/fstab' || printf '%s\n' "UUID=${uuid2} / ext4 defaults 0 0" >>'/etc/fstab'
 }
 
 function create_swap_file() {
@@ -183,7 +183,7 @@ function debian_setup_locale_package() {
 }
 
 function set_language() {
-    grep -q ".*LANG=" '/etc/locale.conf' && sed -i "s,.*LANG=.*,LANG=en_US\.UTF-8," '/etc/locale.conf' || printf '%s\n' 'LANG=en_US.UTF-8' >>'/etc/locale.conf'
+    grep -q -E ".*LANG=" '/etc/locale.conf' && sed -i -E "s,.*LANG=.*,LANG=en_US\.UTF-8," '/etc/locale.conf' || printf '%s\n' 'LANG=en_US.UTF-8' >>'/etc/locale.conf'
 }
 
 function set_hostname() {
@@ -198,21 +198,21 @@ function setup_hosts_file() {
     # Parameters
     local device_hostname=${1}
 
-    grep -q ".*127\.0\.0\.1 localhost" '/etc/hosts' && sed -i "s,.*127\.0\.0\.1 localhost.*,127\.0\.0\.1 localhost," '/etc/hosts' || printf '%s\n' '127.0.0.1 localhost' >>'/etc/hosts'
-    grep -q ".*::1 localhost" '/etc/hosts' && sed -i "s,.*::1.*,::1 localhost," '/etc/hosts' || printf '%s\n' '::1 localhost' >>'/etc/hosts'
-    grep -q ".*127\.0\.0\.1 ${device_hostname}\.localdomain ${device_hostname}" '/etc/hosts' && sed -i "s,.*127\.0\.0\.1 ${device_hostname}.*,127\.0\.0\.1 ${device_hostname}\.localdomain ${device_hostname}," '/etc/hosts' || printf '%s\n' "127.0.0.1 ${device_hostname}.localdomain ${device_hostname}" >>'/etc/hosts'
+    grep -q -E ".*127\.0\.0\.1 localhost" '/etc/hosts' && sed -i -E "s,.*127\.0\.0\.1 localhost.*,127\.0\.0\.1 localhost," '/etc/hosts' || printf '%s\n' '127.0.0.1 localhost' >>'/etc/hosts'
+    grep -q -E ".*::1 localhost" '/etc/hosts' && sed -i -E "s,.*::1.*,::1 localhost," '/etc/hosts' || printf '%s\n' '::1 localhost' >>'/etc/hosts'
+    grep -q -E ".*127\.0\.0\.1 ${device_hostname}\.localdomain ${device_hostname}" '/etc/hosts' && sed -i -E "s,.*127\.0\.0\.1 ${device_hostname}.*,127\.0\.0\.1 ${device_hostname}\.localdomain ${device_hostname}," '/etc/hosts' || printf '%s\n' "127.0.0.1 ${device_hostname}.localdomain ${device_hostname}" >>'/etc/hosts'
 }
 
 function debian_setup_mirrors() {
     # Parameters
     local version=${1}
 
-    grep -q ".*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main contrib non-free" '/etc/apt/sources.list' && sed -i "s,.*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main.*,deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb https://mirrors.wikimedia.org/debian/ ${version} main contrib non-free" >>'/etc/apt/sources.list'
-    grep -q ".*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main contrib non-free" '/etc/apt/sources.list' && sed -i "s,.*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main.*,deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb-src https://mirrors.wikimedia.org/debian/ ${version} main contrib non-free" >>'/etc/apt/sources.list'
-    grep -q ".*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main contrib non-free" '/etc/apt/sources.list' && sed -i "s,.*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main.*,deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb https://mirrors.wikimedia.org/debian/ ${version}-updates main contrib non-free" >>'/etc/apt/sources.list'
-    grep -q ".*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main contrib non-free" '/etc/apt/sources.list' && sed -i "s,.*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main.*,deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb-src https://mirrors.wikimedia.org/debian/ ${version}-updates main contrib non-free" >>'/etc/apt/sources.list'
-    grep -q ".*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main contrib non-free" '/etc/apt/sources.list' && sed -i "s,.*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main.*,deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb https://mirrors.wikimedia.org/debian/ ${version}/updates main contrib non-free" >>'/etc/apt/sources.list'
-    grep -q ".*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main contrib non-free" '/etc/apt/sources.list' && sed -i "s,.*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main.*,deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb-src https://mirrors.wikimedia.org/debian/ ${version}/updates main contrib non-free" >>'/etc/apt/sources.list'
+    grep -q -E ".*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main contrib non-free" '/etc/apt/sources.list' && sed -i -E "s,.*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main.*,deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb https://mirrors.wikimedia.org/debian/ ${version} main contrib non-free" >>'/etc/apt/sources.list'
+    grep -q -E ".*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main contrib non-free" '/etc/apt/sources.list' && sed -i -E "s,.*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main.*,deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version} main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb-src https://mirrors.wikimedia.org/debian/ ${version} main contrib non-free" >>'/etc/apt/sources.list'
+    grep -q -E ".*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main contrib non-free" '/etc/apt/sources.list' && sed -i -E "s,.*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main.*,deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb https://mirrors.wikimedia.org/debian/ ${version}-updates main contrib non-free" >>'/etc/apt/sources.list'
+    grep -q -E ".*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main contrib non-free" '/etc/apt/sources.list' && sed -i -E "s,.*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main.*,deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}-updates main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb-src https://mirrors.wikimedia.org/debian/ ${version}-updates main contrib non-free" >>'/etc/apt/sources.list'
+    grep -q -E ".*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main contrib non-free" '/etc/apt/sources.list' && sed -i -E "s,.*deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main.*,deb https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb https://mirrors.wikimedia.org/debian/ ${version}/updates main contrib non-free" >>'/etc/apt/sources.list'
+    grep -q -E ".*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main contrib non-free" '/etc/apt/sources.list' && sed -i -E "s,.*deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main.*,deb-src https:\/\/mirrors\.wikimedia\.org\/debian\/ ${version}/updates main contrib non-free," '/etc/apt/sources.list' || printf '%s\n' "deb-src https://mirrors.wikimedia.org/debian/ ${version}/updates main contrib non-free" >>'/etc/apt/sources.list'
 }
 
 function debian_install_standard_packages() {
@@ -240,17 +240,17 @@ function enable_base_network_connectivity() {
     # Parameters
     local interface=${1}
 
-    grep -q ".*auto lo" '/etc/network/interfaces' && sed -i "s,.*auto lo.*,auto lo," '/etc/network/interfaces' || printf '%s\n' "auto lo" >>'/etc/network/interfaces'
-    grep -q ".*iface lo inet loopback" '/etc/network/interfaces' && sed -i "s,.*iface lo.*,iface lo inet loopback," '/etc/network/interfaces' || printf '%s\n' "iface lo inet loopback" >>'/etc/network/interfaces'
-    grep -q ".*auto ${interface}" '/etc/network/interfaces' && sed -i "s,.*auto ${interface}.*,auto ${interface}," '/etc/network/interfaces' || printf '%s\n' "auto ${interface}" >>'/etc/network/interfaces'
-    grep -q ".*iface ${interface}" '/etc/network/interfaces' && sed -i "s,.*iface ${interface}.*,iface ${interface} inet dhcp," '/etc/network/interfaces' || printf '%s\n' "iface ${interface} inet dhcp" >>'/etc/network/interfaces'
+    grep -q -E ".*auto lo" '/etc/network/interfaces' && sed -i -E "s,.*auto lo.*,auto lo," '/etc/network/interfaces' || printf '%s\n' "auto lo" >>'/etc/network/interfaces'
+    grep -q -E ".*iface lo inet loopback" '/etc/network/interfaces' && sed -i -E "s,.*iface lo.*,iface lo inet loopback," '/etc/network/interfaces' || printf '%s\n' "iface lo inet loopback" >>'/etc/network/interfaces'
+    grep -q -E ".*auto ${interface}" '/etc/network/interfaces' && sed -i -E "s,.*auto ${interface}.*,auto ${interface}," '/etc/network/interfaces' || printf '%s\n' "auto ${interface}" >>'/etc/network/interfaces'
+    grep -q -E ".*iface ${interface}" '/etc/network/interfaces' && sed -i -E "s,.*iface ${interface}.*,iface ${interface} inet dhcp," '/etc/network/interfaces' || printf '%s\n' "iface ${interface} inet dhcp" >>'/etc/network/interfaces'
 }
 
 function debian_setup_grub() {
     rm -f '/etc/default/grub'
 
-    grep -q ".*GRUB_DEFAULT=" '/etc/default/grub' && sed -i "s,.*GRUB_DEFAULT=.*,GRUB_DEFAULT=0," '/etc/default/grub' || printf '%s\n' "GRUB_DEFAULT=0" >>'/etc/default/grub'
-    grep -q ".*GRUB_TIMEOUT=" '/etc/default/grub' && sed -i "s,.*GRUB_TIMEOUT=.*,GRUB_TIMEOUT=0," '/etc/default/grub' || printf '%s\n' "GRUB_TIMEOUT=0" >>'/etc/default/grub'
+    grep -q -E ".*GRUB_DEFAULT=" '/etc/default/grub' && sed -i -E "s,.*GRUB_DEFAULT=.*,GRUB_DEFAULT=0," '/etc/default/grub' || printf '%s\n' "GRUB_DEFAULT=0" >>'/etc/default/grub'
+    grep -q -E ".*GRUB_TIMEOUT=" '/etc/default/grub' && sed -i -E "s,.*GRUB_TIMEOUT=.*,GRUB_TIMEOUT=0," '/etc/default/grub' || printf '%s\n' "GRUB_TIMEOUT=0" >>'/etc/default/grub'
 
     grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=debian
     update-grub
@@ -271,7 +271,7 @@ function add_user_to_sudo() {
     # Parameters
     local user_name=${1}
 
-    grep -q ".*${user_name}" '/etc/sudoers' && sed -i "s,.*${user_name}.*,${user_name} ALL=\(ALL\) ALL," '/etc/sudoers' || printf '%s\n' "${user_name} ALL=(ALL) ALL" >>'/etc/sudoers'
+    grep -q -E ".*${user_name}" '/etc/sudoers' && sed -i -E "s,.*${user_name}.*,${user_name} ALL=\(ALL\) ALL," '/etc/sudoers' || printf '%s\n' "${user_name} ALL=(ALL) ALL" >>'/etc/sudoers'
 }
 
 function set_shell_bash() {
