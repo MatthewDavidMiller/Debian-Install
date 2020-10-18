@@ -17,27 +17,9 @@ partition_number1='1'
 partition_number2='2'
 delete_partitions_response='n'
 ucode_response='y'
-device_hostname='DebianServer'
-user_name='matthew'
 specify_version='2'
-
-# Prompts, uncomment to use
-# Specify disk and partition numbers to use for install
-#read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
-#read -r -p "Specify partition number for /boot/EFI. Example '1': " partition_number1
-#read -r -p "Specify partition number for root /. Example '2': " partition_number2
 partition1="${disk}${partition_number1}"
 partition2="${disk}${partition_number2}"
-# Specify whether to delete all partitions
-#read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " delete_partitions_response
-# Specify if cpu is intel
-#read -r -p "Is the cpu intel? [y/N] " ucode_response
-# Specify device hostname
-read -r -p "Set the device hostname: " device_hostname
-# Specify user name
-#read -r -p "Specify a username for a new user: " user_name
-# Specify version
-read -r -p "Use stretch [1] or buster [2]? [1/2]: " specify_version
 
 # Call functions
 list_partitions
