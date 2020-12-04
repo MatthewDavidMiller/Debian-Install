@@ -16,11 +16,13 @@ function specify_debian_version() {
     # Specify version
     if [[ "${specify_version}" =~ ^([1])+$ ]]; then
         version='stretch'
+        printf '%s\n' "${version}" >>'env_tmp.sh'
     fi
 
     # Specify version
     if [[ "${specify_version}" =~ ^([2])+$ ]]; then
         version='buster'
+        printf '%s\n' "${version}" >>'env_tmp.sh'
     fi
 }
 
@@ -35,6 +37,7 @@ function delete_all_partitions_on_a_disk() {
 
     local response
     read -r -p "Are you sure you want to delete everything on ${disk}? [y/N] " response
+    printf '%s\n' "${response}" >>'env_tmp.sh'
     if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         # Deletes all partitions on disk
         sgdisk -Z "${disk}"
@@ -48,8 +51,10 @@ function get_ucode_type() {
 
     if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         ucode='intel-microcode'
+        printf '%s\n' "${ucode}" >>'env_tmp.sh'
     else
         ucode='amd-microcode'
+        printf '%s\n' "${ucode}" >>'env_tmp.sh'
     fi
 }
 
@@ -105,30 +110,17 @@ function get_base_partition_uuids() {
     local partition2=${2}
 
     uuid="$(blkid -o value -s UUID "${partition1}")"
+    printf '%s\n' "${uuid}" >>'env_tmp.sh'
     uuid2="$(blkid -o value -s UUID "${partition2}")"
-}
-
-function get_interface_name() {
-    interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
-    echo "Interface name is ${interface}"
+    printf '%s\n' "${uuid2}" >>'env_tmp.sh'
 }
 
 function debian_install_move_to_script_part_2() {
     cp debian_server_scripts.sh '/mnt/debian_server_scripts.sh'
+    cp 'env_tmp.sh' '/mnt/env_tmp.sh'
+    cp 'functions.sh' '/mnt/functions.sh'
     wget -O '/mnt/debian_server_install_part_2.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/Debian-Install/stable/linux_scripts/debian_server_install_part_2.sh'
     chmod +x '/mnt/debian_server_install_part_2.sh'
-    cat <<EOF >'/mnt/temp_variables.sh'
-disk="${disk}"
-partition_number1="${partition_number1}"
-partition_number2="${partition_number2}"
-partition1="${partition1}"
-partition2="${partition2}"
-version="${version}"
-ucode="${ucode}"
-interface="${interface}"
-uuid="${uuid}"
-uuid2="${uuid2}"
-EOF
     LANG=C.UTF-8 chroot /mnt "./debian_server_install_part_2.sh"
 }
 

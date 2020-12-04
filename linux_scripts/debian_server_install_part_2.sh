@@ -5,11 +5,12 @@
 
 # Part 2 of install script for Debian.
 
-# Default variables
+# Source variables
+source env_tmp.sh
 
 # Source functions
 source debian_server_scripts.sh
-source temp_variables.sh
+source functions.sh
 
 # Call functions
 debian_create_boot_directories
