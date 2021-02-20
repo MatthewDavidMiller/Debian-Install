@@ -5,10 +5,6 @@
 # Needs to be run as root.
 # Install scripts for debian server. Use with Debian standard live installer. Run the script when in the live installer.
 
-function list_partitions() {
-    lsblk -f
-}
-
 function specify_debian_version() {
     # Parameters
     local specify_version=${1}
@@ -175,15 +171,6 @@ function debian_install_standard_packages() {
 
 function debian_update_kernel() {
     update-initramfs -u
-}
-
-function apt_clear_cache() {
-    apt-get clean
-}
-
-function set_root_password() {
-    echo 'Set root password'
-    passwd root
 }
 
 function enable_base_network_connectivity() {
