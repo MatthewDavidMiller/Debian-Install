@@ -9,3 +9,4 @@ ucode_response='y'
 specify_version='2'
 partition1="${disk}${partition_number1}"
 partition2="${disk}${partition_number2}"
+version='buster'
